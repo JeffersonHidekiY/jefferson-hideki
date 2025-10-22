@@ -1,27 +1,14 @@
+namespace SpriteKind {
+    export const fire = SpriteKind.create()
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Spirit.vy == 0) {
         Spirit.vy = -150
     }
 })
+let Lava: Sprite = null
 let Spirit: Sprite = null
-Spirit = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . f f f . . . . . . f f f . . 
-    . f 1 1 1 f . . . . f 1 1 1 f . 
-    f 1 1 1 1 1 f . . f 1 1 1 1 1 f 
-    . f 1 1 1 f . . . . f 1 1 1 f . 
-    . . f f f . . . . . . f f f . . 
-    . . . . . f f f f f f . . . . . 
-    . . . f f 1 1 1 1 1 1 f f . . . 
-    . . f 1 1 1 1 1 1 1 1 1 1 f . . 
-    . f 1 1 f f f 1 1 f f f 1 1 f . 
-    . f 1 1 f f 1 1 1 f f 1 1 1 f . 
-    . f 1 1 f f f 1 1 f f f 1 1 f . 
-    . f 1 1 1 1 1 1 1 1 1 1 1 1 f . 
-    . . f 1 1 1 f f f f 1 1 1 f . . 
-    . . . f 1 1 1 1 1 1 1 1 f . . . 
-    . . . . f f f f f f f f . . . . 
-    `, SpriteKind.Player)
+Spirit = sprites.create(assets.image`Spirit`, SpriteKind.Player)
 scene.setBackgroundImage(img`
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -148,4 +135,62 @@ controller.moveSprite(Spirit, 100, 0)
 Spirit.ay = 400
 scene.cameraFollowSprite(Spirit)
 tiles.setCurrentTilemap(tilemap`level1`)
-Spirit.setVelocity(60, 80)
+for (let value of tiles.getTilesByType(assets.tile`Lava`)) {
+    Lava = sprites.create(assets.image`Fire`, SpriteKind.fire)
+    animation.runImageAnimation(
+    Lava,
+    assets.animation`Lava`,
+    200,
+    true
+    )
+    tiles.placeOnTile(Lava, value)
+    tiles.setTileAt(value, assets.tile`transparency16`)
+    for (let value of tiles.getTilesByType(assets.tile`Lava`)) {
+        Lava = sprites.create(assets.image`Fire`, SpriteKind.fire)
+        animation.runImageAnimation(
+        Lava,
+        assets.animation`Lava`,
+        200,
+        true
+        )
+        tiles.placeOnTile(Lava, value)
+        tiles.setTileAt(value, assets.tile`Lava`)
+        for (let value of tiles.getTilesByType(assets.tile`Lava`)) {
+            Lava = sprites.create(assets.image`Fire`, SpriteKind.fire)
+            animation.runImageAnimation(
+            Lava,
+            assets.animation`Lava`,
+            200,
+            true
+            )
+            tiles.placeOnTile(Lava, value)
+            tiles.setTileAt(value, assets.tile`Lava`)
+        }
+    }
+}
+game.onUpdate(function () {
+    Spirit.setImage(img`
+        . . . . . . . . . . . . . . . . 
+        . . f f f . . . . . . f f f . . 
+        . f 1 1 1 f . . . . f 1 1 1 f . 
+        f 1 1 1 1 1 f . . f 1 1 1 1 1 f 
+        . f 1 1 1 f . . . . f 1 1 1 f . 
+        . . f f f . . . . . . f f f . . 
+        . . . . . f f f f f f . . . . . 
+        . . . f f 1 1 1 1 1 1 f f . . . 
+        . . f 1 1 1 1 1 1 1 1 1 1 f . . 
+        . f 1 1 f f f 1 1 f f f 1 1 f . 
+        . f 1 1 f f 1 1 1 f f 1 1 1 f . 
+        . f 1 1 f f f 1 1 f f f 1 1 f . 
+        . f 1 1 1 1 1 1 1 1 1 1 1 1 f . 
+        . . f 1 1 1 f f f f 1 1 1 f . . 
+        . . . f 1 1 1 1 1 1 1 1 f . . . 
+        . . . . f f f f f f f f . . . . 
+        `)
+    if (Spirit.vy < 0) {
+        Spirit.setImage(assets.image`Jump`)
+        if (Spirit.vx < 0) {
+            Spirit.image.flipX()
+        }
+    }
+})
