@@ -1,12 +1,14 @@
 namespace SpriteKind {
     export const fire = SpriteKind.create()
+    export const Gold = SpriteKind.create()
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Spirit.vy == 0) {
         Spirit.vy = -150
     }
 })
-let Lava: Sprite = null
+let Dindin: Sprite = null
+let fire: Sprite = null
 let Spirit: Sprite = null
 Spirit = sprites.create(assets.image`Spirit`, SpriteKind.Player)
 scene.setBackgroundImage(img`
@@ -136,34 +138,34 @@ Spirit.ay = 400
 scene.cameraFollowSprite(Spirit)
 tiles.setCurrentTilemap(tilemap`level1`)
 for (let value of tiles.getTilesByType(assets.tile`Lava`)) {
-    Lava = sprites.create(assets.image`Fire`, SpriteKind.fire)
+    fire = sprites.create(assets.image`Fire`, SpriteKind.fire)
     animation.runImageAnimation(
-    Lava,
+    Dindin,
     assets.animation`Lava`,
     200,
     true
     )
-    tiles.placeOnTile(Lava, value)
+    tiles.placeOnTile(Dindin, value)
     tiles.setTileAt(value, assets.tile`transparency16`)
-    for (let value of tiles.getTilesByType(assets.tile`Lava`)) {
-        Lava = sprites.create(assets.image`Fire`, SpriteKind.fire)
+    for (let value of tiles.getTilesByType(assets.tile`Dindin`)) {
+        Dindin = sprites.create(assets.image`Fire`, SpriteKind.Gold)
         animation.runImageAnimation(
-        Lava,
+        Dindin,
         assets.animation`Lava`,
         200,
         true
         )
-        tiles.placeOnTile(Lava, value)
-        tiles.setTileAt(value, assets.tile`Lava`)
+        tiles.placeOnTile(Dindin, value)
+        tiles.setTileAt(value, assets.tile`Dindin`)
         for (let value of tiles.getTilesByType(assets.tile`Lava`)) {
-            Lava = sprites.create(assets.image`Fire`, SpriteKind.fire)
+            Dindin = sprites.create(assets.image`Fire`, SpriteKind.fire)
             animation.runImageAnimation(
-            Lava,
+            Dindin,
             assets.animation`Lava`,
             200,
             true
             )
-            tiles.placeOnTile(Lava, value)
+            tiles.placeOnTile(Dindin, value)
             tiles.setTileAt(value, assets.tile`Lava`)
         }
     }
